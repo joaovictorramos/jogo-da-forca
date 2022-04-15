@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jogo da Forca</title>
     <style>
+        @media(max-width: 380px){
+            body dl#lista{
+                opacity: 1;
+            }
+        }
+
         body{
             font-family: Arial, Verdana, sans-serif;
             margin: 20px;
@@ -42,6 +48,19 @@
         div#erradas{
             font-weight: bold;
         }
+
+        dl#lista{
+            opacity: 0;
+        }
+
+        dt#lista_titulo{
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        li.lista_titulo_temas{
+            padding: 3px 0px;
+        }
     </style>
 </head>
 <body>
@@ -63,6 +82,13 @@
         <input type="button" value="Enter" id="button">
     </main>
 
+    <dl id="lista">
+        <dt id="lista_titulo">Temas disponíveis: </dt>
+        <li class="lista_titulo_temas">Animal</li>
+        <li class="lista_titulo_temas">Fruta</li>
+        <li class="lista_titulo_temas">Nome</li>
+    </dl>
+
     <h2 id="titulo"></h2>
     <p id="erradas"></p>
     <div id="palito"></div>
@@ -81,6 +107,10 @@
         var result = window.document.getElementById('result')
         var teto = window.document.getElementById('teto_result')
         var dnv = window.document.getElementById('dnv')
+
+        var lista = window.document.getElementById('lista')
+        var lista_titulo = window.document.getElementById('lista_titulo')
+        var lista_temas = window.document.querySelector('.lista_titulo_temas')
 
         var erradas = window.document.getElementById('erradas')
         var palito = window.document.getElementById('palito')
@@ -142,6 +172,8 @@
             label.style.visibility = 'hidden'
             tela.style.visibility = 'hidden'
             button.style.visibility = 'hidden'
+            lista.style.visibility = 'hidden'
+            lista.remove()
 
             titulo.innerHTML = `TEMA: Animal`
 
@@ -166,6 +198,8 @@
             label.style.visibility = 'hidden'
             tela.style.visibility = 'hidden'
             button.style.visibility = 'hidden'
+            lista.style.visibility = 'hidden'
+            lista.remove()
 
             titulo.innerHTML = `TEMA: FRUTA`
 
@@ -190,6 +224,8 @@
             label.style.visibility = 'hidden'
             tela.style.visibility = 'hidden'
             button.style.visibility = 'hidden'
+            lista.style.visibility = 'hidden'
+            lista.remove()
 
             titulo.innerHTML = `TEMA: NOME`
 
