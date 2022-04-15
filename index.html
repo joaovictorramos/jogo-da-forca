@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Forca</title>
+    <style>
+        body{
+            font-family: Arial, Verdana, sans-serif;
+            margin: 20px;
+        }
+
+        main{
+            margin: 10px;
+        }
+
+        h1{
+            text-align: center;
+        }
+
+        h2#result{
+            display: inline-block;
+        }
+
+        div#aux{
+            display: inline;
+        }
+
+        div p#teto_result{
+            display: inline-block;  
+        }
+
+        div input#dnv{
+            display: inline-block;
+        }
+
+        input#tema{
+            width: 120px;
+        }
+
+        div#erradas{
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Jogo da Forca</h1>
+    <h2 id="result"></h2>
+    <div id="aux">
+        <p id="teto_result"></p>
+        <input type="button" value="Enter" id="dnv">
+    </div>
+    
+    <main>
+        <label for="conc" id="label">Escolha o tema: </label>
+        <input list="conc" name="tema" id="tela">
+        <datalist id="conc">
+            <option>Animal</option>
+            <option>Fruta</option>
+            <option>Nome</option>
+        </datalist>
+        <input type="button" value="Enter" id="button">
+    </main>
+
+    <h2 id="titulo"></h2>
+    <p id="erradas"></p>
+    <div id="palito"></div>
+    <div id="obj"></div>
+
+    <script>
+        var obj = window.document.getElementById('obj')
+
+        var vetor = new Array()
+        var cacador = new Array()
+        var corretor = new Array()
+
+        var button = window.document.getElementById('button')
+        var tela = window.document.getElementById('tela')
+
+        var result = window.document.getElementById('result')
+        var teto = window.document.getElementById('teto_result')
+        var dnv = window.document.getElementById('dnv')
+
+        var erradas = window.document.getElementById('erradas')
+        var palito = window.document.getElementById('palito')
+        var titulo = window.document.getElementById('titulo')
+
+        var palitoy = document.createElement('div')
+        var palitoy_2 = document.createElement('div')
+
+        var fim
+        var masc
+        var valor
+        var topico
+        var cont = 0
+        var quant = 0
+        var erros = 0
+        var cont_2 = 0
+        var bolean = 0
+        var finalizarPrograma
+        dnv.style.visibility = 'hidden'
+
+        //Botão 'Enter' funcionando
+        document.addEventListener('keypress',function(e){
+            if(e.key === "Enter"){
+                button.click()
+            }
+        })
+
+        //Selecionar o tema
+        button.addEventListener('click',function(){
+            if(tela.value == 'Animal'){
+                animal()
+                document.getElementById('button').disabled = true
+                    
+            }else if(tela.value == 'Fruta'){
+                fruta()
+                document.getElementById('button').disabled = true
+
+            }else if(tela.value == 'Nome'){
+                nome()
+                document.getElementById('button').disabled = true
+            }
+        })
+
+        //Tema: animal
+        function animal(){
+            vetor[0] = 'CACHORRO'
+            vetor[1] = 'GATO'
+            vetor[2] = 'JACARÉ'
+            vetor[3] = 'LEÃO'
+            vetor[4] = 'GIRAFA'
+            vetor[5] = 'ELEFANTE'
+            vetor[6] = 'RINOCERONTE'
+            vetor[7] = 'PAPAGAIO'
+            vetor[8] = 'PEIXE'
+            vetor[9] = 'TARTARUGA'
+
+            var label = window.document.getElementById('label')
+        
+            label.style.visibility = 'hidden'
+            tela.style.visibility = 'hidden'
+            button.style.visibility = 'hidden'
+
+            titulo.innerHTML = `TEMA: Animal`
+
+            selecao()
+        }
+
+        //Tema: fruta
+        function fruta(){
+            vetor[0] = 'ABACATE'
+            vetor[1] = 'BANANA'
+            vetor[2] = 'CEREJA'
+            vetor[3] = 'UVA'
+            vetor[4] = 'PERA'
+            vetor[5] = 'MELANCIA'
+            vetor[6] = 'MORANGO'
+            vetor[7] = 'LARANJA'
+            vetor[8] = 'DAMASCO'
+            vetor[9] = 'LIMÃO'
+
+            var label = window.document.getElementById('label')
+        
+            label.style.visibility = 'hidden'
+            tela.style.visibility = 'hidden'
+            button.style.visibility = 'hidden'
+
+            titulo.innerHTML = `TEMA: FRUTA`
+
+            selecao()
+        }
+
+        //Tema: nome
+        function nome(){
+            vetor[0] = 'JOÃO'
+            vetor[1] = 'GUSTAVO'
+            vetor[2] = 'RONALDO'
+            vetor[3] = 'GABRIEL'
+            vetor[4] = 'ARTHUR'
+            vetor[5] = 'DANIEL'
+            vetor[6] = 'KEVIN'
+            vetor[7] = 'RENATO'
+            vetor[8] = 'LUCAS'
+            vetor[9] = 'CHRISTOPHER'
+
+            var label = window.document.getElementById('label')
+        
+            label.style.visibility = 'hidden'
+            tela.style.visibility = 'hidden'
+            button.style.visibility = 'hidden'
+
+            titulo.innerHTML = `TEMA: NOME`
+
+            selecao()
+        }
+
+        //Seleção aleatória
+        function selecao(){
+            valor = Math.round(Math.random()*9)+0
+            topico = vetor[valor]
+            fim = vetor[valor].length
+
+            //obj.innerHTML += topico
+            palitoy.innerHTML += '&nbsp&nbsp&nbsp&nbsp'
+            while(cont < fim){
+                palitoy.innerHTML += `_&nbsp&nbsp&nbsp`
+                document.body.appendChild(palitoy)
+                document.body.appendChild(palitoy_2)
+                cont++
+            }
+
+            cruz()
+        }
+
+        //Criando a forca
+        function cruz(){
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp______<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `___________<br><br><br><br>`
+
+            if(bolean == 0){
+                carregar()
+            }
+        }
+
+        //Campo de digitação das letras
+        function carregar(){
+            var input = document.createElement('input')
+            var letra = document.createElement('button')
+            var naopode = []
+            var alfa
+            
+            letra.innerHTML += `Enter`
+            
+            input.setAttribute('maxlength','1')
+            input.setAttribute('placeholder','Digite a letra aqui')
+            document.body.appendChild(input)
+            document.body.appendChild(letra)
+
+            input.style.marginTop = `40px`
+            letra.style.marginTop = `40px`
+            letra.style.marginLeft = `5px`
+            input.focus()
+
+            //Botão 'Enter' ativado
+            document.addEventListener('keypress',function(f){
+                if(f.key === "Enter"){
+                    letra.click()
+                }
+            })
+
+            letra.addEventListener('click',function(){
+
+                //Impedir repetições de letras maiúsculas e minúsculas
+                if(naopode.indexOf(input.value) == -1){
+                    naopode.push(input.value.toLowerCase())
+                    naopode.push(input.value.toUpperCase())
+
+                    if(input.value == ''){
+                        window.alert('POR FAVOR, DIGITE UMA LETRA!')
+                        
+                    }else{
+                        if(topico == 'JACARÉ'){
+                            if((input.value == 'e')||(input.value == 'E')){
+                                input.value = 'É'
+                            }
+                        }
+                        if((topico == 'LEÃO')||(topico == 'LIMÃO')||(topico == 'JOÃO')){
+                            if((input.value == 'a')||(input.value == 'A')){
+                                input.value = 'Ã'
+                            }
+                        }
+                        alfa = input
+                            
+                        //Procurar se a letra informada foi encontrada no 'topico'
+                        if(topico.match(alfa.value.toUpperCase())){
+                            certoerrado(alfa)
+                            quant++
+                            acertos(alfa,quant,letra)
+
+                            input.value = ''
+                            input.focus()
+
+                        }else{
+                            erradas.style.fontWeight = 'bolder'
+                            erradas.style.color = 'red'
+                            erradas.innerHTML += `${alfa.value.toUpperCase()} `
+
+                            bolean = 1
+
+                            erros++
+                            switch(erros){
+                                case 1:
+                                    cabeca()
+                                    break
+
+                                case 2:
+                                    corpo()
+                                    break
+
+                                case 3:
+                                    b_esquerdo()
+                                    break
+
+                                case 4:
+                                    b_direito()
+                                    break
+
+                                case 5:
+                                    p_esquerda()
+                                    break
+
+                                case 6:
+                                    p_direita(letra)
+                                    break
+                            }
+
+                            input.value = ''
+                            input.focus()
+                        }
+                    }
+                }else{
+                    window.alert('ESTA PALAVRA JÁ FOI DIGITADA, INFORME OUTRA!')
+
+                    input.value = ''
+                }
+            })
+        }
+
+        //Armar os traçados e colocar as letras corretas
+        function certoerrado(alfa){
+            var escada = []
+            var cont_3 = 0
+
+            palitoy.innerHTML = ''
+            palitoy.innerHTML += '&nbsp&nbsp&nbsp&nbsp'
+
+            //Colocar os traçados no vetor 'escada'
+            for(var cont_3 = 0; cont_3 < fim; cont_3++){
+                escada.push('_&nbsp&nbsp&nbsp')
+            }
+
+            //Colocar as letras no vetor 'cacador'
+            if(cacador.indexOf(alfa.value.toUpperCase()) == -1){
+                cacador.push(alfa.value.toUpperCase())
+            }
+
+            //Inserção das letras
+            for(var cont = 0; cont < fim; cont++){
+                for(var cont_2 = 0; cont_2 < cacador.length; cont_2++){ 
+                    if(cacador[cont_2] == topico[cont]){
+                        escada[cont] = (`<u style: padding-top: 500000px;>${cacador[cont_2]}</u>&nbsp&nbsp&nbsp`)
+                    }
+                }if(cacador[cont_2] != topico[cont]){
+                    palitoy_2.innerHTML += `${escada[cont]}`
+                }
+            }
+            palitoy_2.innerHTML += `<br>`
+        }
+
+        //Calcular os certos pela quantidade de letras inseridas (sem contar REPETIÇÕES)
+        function acertos(alfa,quant,letra){
+            for(var cont = 0; cont < fim; cont++){
+                if(corretor.indexOf(topico[cont]) == -1){
+                    corretor.push(topico[cont])
+                }
+            }
+
+            //Retirar as letras repetidas
+            var semRepeticao = corretor.filter(function(el,i){
+                return corretor.indexOf(el) === i
+            })
+
+            if(quant == corretor.length){
+                resultado(1)
+                letra.disabled = true
+            }
+        }
+
+        function cabeca(){
+            palito.innerHTML = ``
+
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp______<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspO<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `___________<br><br><br><br>`
+        }
+
+        function corpo(){
+            palito.innerHTML = ``
+
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp______<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspO<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `___________<br><br><br><br>`
+        }
+
+        function b_esquerdo(){
+            palito.innerHTML = ``
+
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp______<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspO<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp----|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `___________<br><br><br><br>`
+        }
+
+        function b_direito(){
+            palito.innerHTML = ``
+
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp______<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspO<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp----|----<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `___________<br><br><br><br>`
+        }
+
+        function p_esquerda(){
+            palito.innerHTML = ``
+
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp______<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspO<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp----|----<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp/<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `___________<br><br><br><br>`
+        }
+
+        function p_direita(letra){
+            palito.innerHTML = ``
+
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp______<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspO<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp----|----<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp/\\<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp|<br>`
+            palito.innerHTML += `___________<br><br><br><br>`
+            letra.disabled = true
+
+            resultado(0)
+        }
+
+        //Resultado final
+        function resultado(finalizarPrograma){
+            var aux = window.document.getElementById('aux')
+
+            dnv.style.visibility = 'visible'
+            dnv.addEventListener('click',function(){
+                document.location.reload(true)
+            })
+
+            aux.style.display = 'block'
+            aux.style.textAlign = 'center'
+
+            result.style.display = 'block'
+            result.style.textAlign = 'center'
+
+            teto.style.textAlign = 'center'
+            teto.style.fontSize = '1.5em'
+            teto.style.fontWeight = 'bolder'
+
+            dnv.style.marginLeft = '15px'
+
+            if(finalizarPrograma == 0){
+                obj.style.fontWeight = 'bold'
+                obj.innerHTML += `A palavra era: <mark>${topico}</mark>`
+
+                result.innerHTML += `VOCÊ PERDEU!`
+
+            }else if(finalizarPrograma == 1){
+                result.innerHTML += `PARABÉNS! VOCÊ GANHOU!!!`
+            }
+            teto.innerHTML += `Clique aqui caso queira tentar novamente -> `         
+        }
+    </script>
+</body>
+</html>
